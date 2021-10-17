@@ -1,5 +1,5 @@
 const MagicLinkModel = require('../../models/magicLink')
-const MagicLinkModel = require('../../models/user')
+const UserModel = require('../../models/user')
 
 const crypto = require('crypto')
 
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
   return res.json(resp)
 }
 
-function getUniqueHash() {
+async function getUniqueHash() {
   const hash = crypto.randomBytes(40).toString('hex')
   const resp = await MagicLinkModel.findOne({hash})
   if (resp) {

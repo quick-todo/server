@@ -3,8 +3,8 @@ const asyncHandler = require('express-async-handler')
 const router = express.Router()
 
 
-const authService = require('./services/auth/auth')
-router.post('/auth/login', asyncHandler(authService))
+
+router.post('/auth/login', asyncHandler(require('./services/auth/auth')))
 
 
 module.exports = router

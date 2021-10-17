@@ -1,4 +1,4 @@
-const userModel = require('./user.model')
+const userModel = require('../../models/user')
 
 module.exports = async (req, res) => {
   const { email } = req.body

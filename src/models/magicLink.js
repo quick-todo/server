@@ -5,9 +5,6 @@ const MagicLinkSchema = new Schema({
     type: String,
     required: true,
   },
-  userId: {
-
-  },
   isUsed: {
     type: Boolean, 
     default: false,
