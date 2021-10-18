@@ -1,10 +1,11 @@
-require('dotenv').config()
+import { config } from 'dotenv'
+config()
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const mongoose = require('mongoose')
-const routes = require('./src/routes')
+import express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import mongoose from 'mongoose'
+import routes from './routes'
 
 const app = express()
 
@@ -13,10 +14,7 @@ app.use(bodyParser.json())
 
 app.use(routes)
 
-
-mongoose.connect(process.env.DB_CONNECTION_URL, {
-  useNewUrlParser: "true",
-})
+mongoose.connect(process.env.DB_CONNECTION_URL || '')
 
 mongoose.connection.on("error", err => {
   console.log("err", err)

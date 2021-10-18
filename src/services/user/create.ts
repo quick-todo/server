@@ -1,6 +1,6 @@
-const userModel = require('../../models/user')
+import userModel from '../../models/user'
 
-module.exports = async (req, res) => {
+export default async (req: any, res: any) => {
   const { email } = req.body
   let user = await userModel.findOne({ email })
   if (!user) {
