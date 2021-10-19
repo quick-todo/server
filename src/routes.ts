@@ -10,8 +10,8 @@ router.post('/current-user', authenticate, asyncHandler((req: Request, res: Resp
   res.json(res.locals.user)
 }))
 
-router.post('/magic-link/generate', asyncHandler(magicLink.createMagicLink))
-router.post('/magic-link/redeem', asyncHandler(magicLink.redeem))
+router.post('/magic-link/create', asyncHandler(magicLink.createMagicLink))
+router.post('/magic-link/generate-access-token', asyncHandler(magicLink.redeem))
 
 
 export default router
