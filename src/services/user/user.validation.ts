@@ -1,4 +1,4 @@
-import { validateBody } from '../../core/util'
+import { validateBody } from '@core/util'
 import Joi from 'joi'
 
 

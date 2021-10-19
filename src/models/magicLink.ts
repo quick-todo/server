@@ -1,14 +1,22 @@
-import mongoose from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
+import { User } from '@models/user'
 
-const MagicLinkSchema = new mongoose.Schema({
+
+export interface MagicLink {
+  hash: string;
+  password: string;
+  user: User;
+}
+
+const MagicLinkSchema = new Schema<MagicLink>({
   hash: {
     type: String,
     required: true,
   },
-  isUsed: {
-    type: Boolean, 
-    default: false,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
   },
 }, {timestamps: true})
 
-export default mongoose.model("MagicLink", MagicLinkSchema)
+export default model<MagicLink>("MagicLink", MagicLinkSchema)

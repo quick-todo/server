@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
-import MagicLinkModel from '../../models/magicLink'
-import UserModel from '../../models/user'
-import { error, success } from '../../core/response'
-import { getUniqueHash } from './helper'
+import MagicLinkModel from '@models/magicLink'
+import UserModel, { User } from '@models/user'
+import { getUniqueHash } from '@services/magicLink/helper'
+import { success, error } from '@core/response'
+import { signUserData } from '@core/jwt'
 
 
 export async function createMagicLink(req: Request, res: Response) {
@@ -14,15 +15,21 @@ export async function createMagicLink(req: Request, res: Response) {
   }
   
   const hash = await getUniqueHash()
-  const resp = await MagicLinkModel.create({ hash })
-  
-  return res.json(success(resp))
+  await MagicLinkModel.create({ hash, user: user._id })
+  return res.json(success({hash}))
 }
 
-export async function generateAccessToken(req: Request, res: Response) {
+export async function redeem(req: Request, res: Response) {
   const { hash } = req.body
-  const resp = await MagicLinkModel.findOne({ hash })
-  if (resp) {
-    return res.json(error({ message:'Invalid magic link hash' }))
+  const resp = await MagicLinkModel.findOne({ hash }).populate('user').exec()
+  if (!resp) {
+    return res.json(error('Invalid magic link hash'))
   }
+
+  const user = resp.user
+  const payload = signUserData({
+    email: user?.email
+  })
+
+  return res.json(success(payload))
 }

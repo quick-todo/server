@@ -3,17 +3,19 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es6",
+    "target": "ES2020",
+    "lib": ["ESNext", "ES2020"],
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
+      "@core/*": ["core/*"],
+      "@services/*": ["services/*"],
       "@models/*": ["models/*"],
-    }
+      "@middleware/*": ["middleware/*"]
+    },
+    "typeRoots" : ["./node_modules/@types", "./src/typings"]
   },
-  "include": [
-      "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

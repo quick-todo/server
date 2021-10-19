@@ -1,4 +1,4 @@
-import userModel from '../../models/user'
+import userModel from '@models/user'
 
 export default async (req: any, res: any) => {
   const { email } = req.body
