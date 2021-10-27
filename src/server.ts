@@ -1,11 +1,12 @@
 import { config } from 'dotenv'
 config()
 
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import routes from './routes'
+import { error } from '@core/response'
 
 const app = express()
 
@@ -13,6 +14,14 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.use(routes)
+
+app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
+  if (res.headersSent) {
+    return next(err)
+  }
+
+  res.status(500).json(error(err.message))
+})
 
 mongoose.connect(process.env.DB_CONNECTION_URL || '')
 

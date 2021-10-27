@@ -7,8 +7,7 @@ import { signUserData } from '@core/jwt'
 
 
 export async function createMagicLink(req: Request, res: Response) {
-  const { email } = req.body
-  
+  const { email } = req.body  
   let user = await UserModel.findOne({ email })
   if (!user) {
     user = await UserModel.create({ email })
@@ -19,17 +18,18 @@ export async function createMagicLink(req: Request, res: Response) {
   return res.json(success({hash}))
 }
 
-export async function redeem(req: Request, res: Response) {
+export async function generateAccessToken(req: Request, res: Response) {
   const { hash } = req.body
   const resp = await MagicLinkModel.findOne({ hash }).populate('user').exec()
   if (!resp) {
-    return res.json(error('Invalid magic link hash'))
+    return res.status(400).json(error('Invalid magic link hash'))
+  }
+  const user = resp.user
+  const payload = {
+    email: user?.email
   }
 
-  const user = resp.user
-  const payload = signUserData({
-    email: user?.email
-  })
-
-  return res.json(success(payload))
+  return res.json(success({
+    accessToken: signUserData(payload)
+  }))
 }
