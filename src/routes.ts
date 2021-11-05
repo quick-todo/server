@@ -1,18 +1,23 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
 import asyncHandler from 'express-async-handler'
 import authenticate from  '@middleware/authenticate'
-
-import * as magicLink from '@services/magicLink/magicLink'
-import { success } from '@core/response'
+import generateAccessToken from '@services/magicLink/generateAccessToken'
+import createMagicLink from '@services/magicLink/createMagicLink'
+import currentUser from '@services/miscellaneous/currentUser'
 
 const router = express.Router()
 
-router.get('/current-user', authenticate, asyncHandler((req: Request, res: Response) => {
-  res.json(success(res.locals.user))
-}))
+ 
+router.get('/current-user', authenticate, asyncHandler(currentUser.service))
 
-router.post('/magic-link/create', asyncHandler(magicLink.createMagicLink))
-router.post('/magic-link/generate-access-token', asyncHandler(magicLink.generateAccessToken))
+router.post('/magic-link/create', 
+  createMagicLink.constrains, 
+  asyncHandler(createMagicLink.service)
+)
 
+router.post('/magic-link/generate-access-token', 
+  generateAccessToken.constrains, 
+  asyncHandler(generateAccessToken.service)
+)
 
 export default router

@@ -15,12 +15,19 @@ app.use(bodyParser.json())
 
 app.use(routes)
 
-app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
     return next(err)
   }
 
-  res.status(500).json(error(err.message))
+  if (err && err.error && err.error.isJoi) {
+    // joi error
+    return res
+      .status(400)
+      .json(error(err.error.details.map((obj: any) => obj.message)))
+  }
+
+  return res.status(500).json(error(err.message))
 })
 
 mongoose.connect(process.env.DB_CONNECTION_URL || '')

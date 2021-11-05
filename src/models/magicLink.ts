@@ -6,6 +6,8 @@ export interface MagicLink {
   hash: string;
   password: string;
   user: User;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const MagicLinkSchema = new Schema<MagicLink>({
