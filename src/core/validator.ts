@@ -6,6 +6,12 @@ import { query } from 'express'
 type ValidationType = 'query' | 'params' | 'body'
 
 
+export function validatePostRequest(rules: object): any {
+  const validatorInit = validator.createValidator({ passError: true })
+  return validatorInit.body(Joi.object(rules))
+}
+
+
 export function validate(index: ValidationType, rules: object): any {
   const schema = Joi.object(rules)
   const v = validator.createValidator({ passError: true })

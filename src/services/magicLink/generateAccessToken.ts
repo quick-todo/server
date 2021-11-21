@@ -27,6 +27,7 @@ export async function generateAccessToken(req: Request, res: Response) {
   
   const user = resp.user
   const payload = {
+    id: user._id,
     email: user?.email
   }
 
