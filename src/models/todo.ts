@@ -1,11 +1,13 @@
 import { Schema, model } from 'mongoose'
 
 export interface Todo {
-  task: string;
-  isCompleted: boolean;
-  user: Schema.Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  task: string
+  isCompleted: boolean
+  user: Schema.Types.ObjectId
+  hashtags: Array<String>
+  taggedUsers: Array<String>
+  createdAt: Date
+  updatedAt: Date
 }
 
 const TodoSchema = new Schema<Todo>({
@@ -19,7 +21,16 @@ const TodoSchema = new Schema<Todo>({
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
+    required: true
+  },
+  hashtags: {
+    type: [String],
+    required: true
+  },
+  taggedUsers: {
+    type: [String],
+    required: true
   },
 }, {timestamps: true})
 

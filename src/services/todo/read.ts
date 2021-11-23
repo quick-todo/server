@@ -15,10 +15,8 @@ export function groupByCompleteStats(records: any) {
 }
 
 async function read(req: Request, res: Response) {  
-  const user = res.locals.user
-  const records = await todo.find({ userId: user.id }).sort({ createdAt: -1 })
-  // const response = groupByCompleteStats(records)
-  
+  const user = res.locals.user  
+  const records = await todo.find({ userId: user.id }).sort({ createdAt: -1 })  
   res.json(success(records))
 }
 
