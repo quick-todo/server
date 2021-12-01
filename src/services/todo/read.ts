@@ -3,22 +3,43 @@ import todo from "@models/todo"
 import { Request, Response } from "express"
 
 
-export function groupByCompleteStats(records: any) {
-  const ret: Record<string, any> = {}
-  for (const record of records) {
-    const groupIndex = record.isCompleted ? 'completed' : 'pending'
-    const curser = ret[groupIndex] || []
-    curser.push(record)
-    ret[groupIndex] = curser
-  }
-  return ret
-}
 
 async function read(req: Request, res: Response) {  
   const user = res.locals.user  
-  const records = await todo.find({ userId: user.id }).sort({ createdAt: -1 })  
-  res.json(success(records))
+  const records = await todo.find({ userId: user.id }).sort({ createdAt: -1 })
+  const data = groupData(records)
+  
+  res.json(success(data))
 }
+
+function groupData(data: any) {
+  const stub: any = {
+    done: [],
+    pending: [],
+    hashtags: new Set(),
+    taggedUsers: new Set(),
+  }
+
+  const ret = data.reduce((box: any, item: any) => {
+    if (item.isCompleted) {
+      box.done.push(item)
+    }else{
+      item.hashtags.forEach((tag: any) => box.hashtags.add(tag))
+      item.taggedUsers.forEach((tag: any) => box.taggedUsers.add(tag))
+      box.pending.push(item)
+    }
+    return box
+  }, stub)
+
+  ret.hashtags = Array.from(ret.hashtags)
+  ret.taggedUsers = Array.from(ret.taggedUsers)
+
+  return ret
+}
+
+
+
+
 
 
 export default {
