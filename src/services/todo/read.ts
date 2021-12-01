@@ -6,7 +6,7 @@ import { Request, Response } from "express"
 
 async function read(req: Request, res: Response) {  
   const user = res.locals.user  
-  const records = await todo.find({ userId: user.id }).sort({ createdAt: -1 })
+  const records = await todo.find({ user: user.id }).sort({ createdAt: -1 })
   const data = groupData(records)
   
   res.json(success(data))
